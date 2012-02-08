@@ -1,0 +1,38 @@
+package pt.ist.socialframework.domain;
+
+class SocialPlatform;
+
+class Party;
+
+class Interaction;
+
+class InteractionRole {
+	String name;
+}
+
+class InteractionRolePlay;
+
+relation SocialPlatformHasInteractions {
+	SocialPlatform playsRole { multiplicity 1..1; }
+	Interaction playsRole interaction { multiplicity 0..*; }
+}
+
+relation RolePlaysAreAssociatedToRoles {
+	InteractionRole playsRole role { multiplicity 1..1; }
+	InteractionRolePlay playsRole rolePlay { multiplicity 0..*; }
+}
+
+relation PartiesPlayRoles {
+	Party playsRole party { multiplicity 1..1; }
+	InteractionRolePlay playsRole interactionRolePlay { multiplicity 0..*; }
+}
+
+relation SocialPlatformHasInteractionRoles {
+	SocialPlatform playsRole { multiplicity 1..1; }
+	InteractionRole playsRole interactionRole { multiplicity 0..*; }
+}
+
+relation PartiesPlayRoleOnInteractions {
+	InteractionRolePlay playsRole rolePlay { multiplicity 2..*; }
+	Interaction playsRole interaction { multiplicity 1..1; }
+}

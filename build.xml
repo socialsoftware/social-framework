@@ -1,0 +1,43 @@
+<project name="social-framework" basedir="." default="generate-domain">
+	
+	<property name="application.name" value="${ant.project.name}"/>
+	
+	<property name="src.dir" value="src/main"/>
+	<property name="java.src.dir" value="${src.dir}/java"/>
+	<property name="dml.src.dir" value="${src.dir}/dml"/>
+	
+	<property name="lib.dir" value="lib"/>
+	
+	<property name="target.dir" value="target"/>
+	<property name="classes.target.dir" value="${target.dir}/classes"/>
+	<property name="src.target.dir" value="${target.dir}/src"/>
+	
+	<property name="bin.dir" value="bin"/>
+	
+	<property name="dml.filename" value="${application.name}.dml"/>
+	
+	<property name="javac.encoding" value="UTF-8" />
+	<property name="java.file.encoding" value="UTF-8" />
+
+  	<path id="project.classpath">
+    	<pathelement location="${classes.target.dir}" />
+    	<fileset dir="${lib.dir}">
+      		<include name="**/*.jar" />
+    	</fileset>
+  	</path>
+
+	<taskdef resource="pt/ist/fenixframework/dml-ant.xml" classpathref="project.classpath"/>
+	
+	<target name="generate-domain" description="Generates the FenixFramework base classes">
+		<dml-domain-generator destDirectory="${java.src.dir}"
+                          	  destDirectoryBase="${src.target.dir}">
+			<fileset file="${dml.src.dir}/${application.name}.dml"/>
+		</dml-domain-generator>
+  	</target>
+
+	<target name="clean" description="Cleans the project">
+		<delete dir="${target.dir}" />
+		<delete dir="${bin.dir}" />
+	</target>
+	
+</project>
