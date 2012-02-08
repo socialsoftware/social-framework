@@ -4,13 +4,38 @@ class SocialPlatform;
 
 class Party;
 
-class Interaction;
+class Interaction {
+	DateTime creationTime;
+}
 
 class InteractionRole {
 	String name;
 }
 
 class InteractionRolePlay;
+
+class InteractionRelation;
+
+class Information;
+
+class InformationVersion;
+
+
+class InformationRelationType {
+	String name;
+}
+
+class InformationRelation;
+
+class EffectivePeriod {
+	DateTime startTime;
+	DateTime endTime;
+}
+
+relation SocialPlatformHasParties {
+	SocialPlatform playsRole { multiplicity 1..1; }
+	Party playsRole party { multiplicity 0..*; }
+}
 
 relation SocialPlatformHasInteractions {
 	SocialPlatform playsRole { multiplicity 1..1; }
@@ -22,7 +47,12 @@ relation RolePlaysAreAssociatedToRoles {
 	InteractionRolePlay playsRole rolePlay { multiplicity 0..*; }
 }
 
-relation PartiesPlayRoles {
+relation RolePlaysAreEffectiveOnPeriods {
+	InteractionRolePlay playsRole interactionRolePlay { multiplicity 0..1; }
+	EffectivePeriod playsRole effectivePeriod { multiplicity 1..1; }
+}
+
+relation PartiesPlayInteractionRoles {
 	Party playsRole party { multiplicity 1..1; }
 	InteractionRolePlay playsRole interactionRolePlay { multiplicity 0..*; }
 }
@@ -33,6 +63,67 @@ relation SocialPlatformHasInteractionRoles {
 }
 
 relation PartiesPlayRoleOnInteractions {
-	InteractionRolePlay playsRole rolePlay { multiplicity 2..*; }
+	InteractionRolePlay playsRole rolePlay { multiplicity 0..*; }
 	Interaction playsRole interaction { multiplicity 1..1; }
 }
+
+relation InformationVersionIsAuthored { 
+	Party playsRole author { multiplicity 1..1; }
+	InformationVersion playsRole authoredInformationVersion { multiplicity 0..*; }
+}
+
+relation InformationHasInformationVersions {
+	Information playsRole information { multiplicity 1..1; }
+	InformationVersion playsRole version { multiplicity 1..*; }
+}
+
+relation InformationHasLastInformationVersion {
+	Information playsRole { multiplicity 0..1; }
+	InformationVersion playsRole lastVersion { multiplicity 1..1; }
+}
+
+relation InformationVersionMayBeForked {
+	InformationVersion playsRole sourceVersion { multiplicity 0..1; }
+	InformationVersion playsRole forkedVersion { multiplicity 0..*; }
+}
+
+relation InformationVersionMayHaveNextVersion {
+	InformationVersion playsRole previousVersion { multiplicity 0..1; }
+	InformationVersion playsRole nextVersion { multiplicity 0..1; }
+}
+
+relation InteractionCanBeSourceOfInteractionRelation {
+	InteractionRelation playsRole targetInteractionRelation { multiplicity 0..*; }
+	Interaction playsRole targetInteraction { multiplicity 1..1; }
+}
+
+relation InteractionCanBeTargetOfInteractionRelation {
+	InteractionRelation playsRole sourceInteractionRelation { multiplicity 0..*; }
+	Interaction playsRole sourceInteraction { multiplicity 1..1; }
+}
+
+relation InformationRelationHasEffectivePeriods {
+	InformationRelation playsRole { multiplicity 0..1; }
+	EffectivePeriod playsRole effectivePeriod { multiplicity 1..*; }
+}
+
+relation InformationMayBeSourceOfInformationRelation {
+	Information playsRole sourceInformation { multiplicity 1..1; }
+	InformationRelation playsRole sourceInformationRelation { multiplicity 0..*; }
+}
+
+relation InformationMayBeTargetOfInformationRelation { 
+	Information playsRole targetInformation { multiplicity 1..1; }
+	InformationRelation playsRole targetInformationRelation { multiplicity 0..*; }
+}
+
+relation InformationVersionHasEffectivePeriods {
+	InformationVersion playsRole { multiplicity 0..1; }
+	EffectivePeriod playsRole effectivePeriod { multiplicity 1..1; }
+}
+
+relation InformationRelationHasInformationRelationType {
+	InformationRelationType playsRole type { multiplicity 1..1; }
+	InformationRelation playsRole informationRelation { multiplicity 0..*; }
+}
+
