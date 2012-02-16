@@ -1,5 +1,6 @@
 package pt.ist.socialframework.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Information extends Information_Base {
@@ -19,9 +20,10 @@ public class Information extends Information_Base {
 		}
 	}
 	
-	public Set<InformationVersion> getRelatedInformation(InformationRelation informationRelation) {
+	public Set<Information> getRelatedInformation(InformationRelation informationRelation) {
 		Set<Information> information = new HashSet<Information>();
 		InformationVersion informationVersion = getLastVersion();
+		return information;
 	}
 	
 }
