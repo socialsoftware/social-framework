@@ -12,7 +12,7 @@ class InteractionRole {
 	String name;
 }
 
-class InteractionRolePlay;
+class PartyInteractionRole;
 
 class InteractionRelation;
 
@@ -42,19 +42,19 @@ relation SocialPlatformHasInteractions {
 	Interaction playsRole interaction { multiplicity 0..*; }
 }
 
-relation RolePlaysAreAssociatedToRoles {
-	InteractionRole playsRole role { multiplicity 1..1; }
-	InteractionRolePlay playsRole rolePlay { multiplicity 0..*; }
+relation InteractionRoleHasPartyInteractionRole {
+	InteractionRole playsRole interactionRole { multiplicity 1..1; }
+	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..*; }
 }
 
-relation RolePlaysAreEffectiveOnPeriods {
-	InteractionRolePlay playsRole interactionRolePlay { multiplicity 0..1; }
-	EffectivePeriod playsRole effectivePeriod { multiplicity 1..1; }
+relation PartyInteractionRoleHasEffectivePeriod {
+	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..1; }
+	EffectivePeriod playsRole effectivePeriod { multiplicity 0..*; }
 }
 
-relation PartiesPlayInteractionRoles {
+relation PartyHasPartyInteractionRole {
 	Party playsRole party { multiplicity 1..1; }
-	InteractionRolePlay playsRole interactionRolePlay { multiplicity 0..*; }
+	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..*; }
 }
 
 relation SocialPlatformHasInteractionRoles {
@@ -62,8 +62,8 @@ relation SocialPlatformHasInteractionRoles {
 	InteractionRole playsRole interactionRole { multiplicity 0..*; }
 }
 
-relation PartiesPlayRoleOnInteractions {
-	InteractionRolePlay playsRole rolePlay { multiplicity 0..*; }
+relation InteractionHasPartyInteractionRole {
+	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..*; }
 	Interaction playsRole interaction { multiplicity 1..1; }
 }
 

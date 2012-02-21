@@ -7,9 +7,9 @@ public class Interaction extends Interaction_Base {
 
 	public Set<InteractionRole> getInteractionRoleSetForParty(Party party) {
 		Set<InteractionRole> interactionRoleSet = new HashSet<InteractionRole>();
-		for(InteractionRolePlay interactionRolePlay : getRolePlaySet()) {
-			if(interactionRolePlay.isPlayedBy(party)) {
-				interactionRoleSet.add(interactionRolePlay.getRole());
+		for(PartyInteractionRole partyInteractionRole : getPartyInteractionRoleSet()) {
+			if(partyInteractionRole.getParty().equals(party)) {
+				interactionRoleSet.add(partyInteractionRole.getInteractionRole());
 			}
 		}
 		return interactionRoleSet;

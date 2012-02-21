@@ -4,6 +4,10 @@ import org.joda.time.DateTime;
 
 public class EffectivePeriod extends EffectivePeriod_Base {
 	
+	public EffectivePeriod(DateTime startTime) {
+		setStartTime(startTime);
+	}
+
 	public void init(DateTime startTime) {
 		setStartTime(startTime);
 	}
