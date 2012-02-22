@@ -15,4 +15,8 @@ public class Interaction extends Interaction_Base {
 		return interactionRoleSet;
 	}
 	
+	public void rollBack()
+	{
+		this.deleteDomainObject();
+	}
 }
