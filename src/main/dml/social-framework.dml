@@ -8,122 +8,31 @@ class Interaction {
 	DateTime creationTime;
 }
 
-class InteractionRole {
-	String name;
-}
-
-class PartyInteractionRole;
-
-class InteractionRelation;
-
 class Information;
 
-class InformationVersion;
+class Attribute;
 
-
-class InformationRelationType {
-	String name;
-}
-
-class InformationRelation;
-
-class EffectivePeriod {
-	DateTime startTime;
-	DateTime endTime;
-}
-
-relation SocialPlatformHasParties {
-	SocialPlatform playsRole { multiplicity 1..1; }
+relation SocialPlatformHasParty {
+	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
 	Party playsRole party { multiplicity 0..*; }
 }
 
-relation SocialPlatformHasInteractions {
-	SocialPlatform playsRole { multiplicity 1..1; }
+relation PartyHasInteraction { 
+	Party playsRole party { multiplicity 0..*; }
 	Interaction playsRole interaction { multiplicity 0..*; }
 }
 
-relation InteractionRoleHasPartyInteractionRole {
-	InteractionRole playsRole interactionRole { multiplicity 1..1; }
-	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..*; }
+relation InteractionHasInteractions {
+	Interaction playsRole sourceInteraction { multiplicity 0..1; }
+	Interaction playsRole destinationInteraction { multiplicity 0..*; }
 }
 
-relation PartyInteractionRoleHasEffectivePeriod {
-	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..1; }
-	EffectivePeriod playsRole effectivePeriod { multiplicity 0..*; }
+relation InteractionHasInformation { 
+	Interaction playsRole interaction { multiplicity 0..1; }
+	Information playsRole information { multiplicity 0..*; }
 }
 
-relation PartyHasPartyInteractionRole {
-	Party playsRole party { multiplicity 1..1; }
-	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..*; }
+relation InformationHasAttributes { 
+	Information playsRole information { multiplicity 0..1; }
+	Attribute playsRole attribute { multiplicity 0..*; }
 }
-
-relation SocialPlatformHasInteractionRoles {
-	SocialPlatform playsRole { multiplicity 1..1; }
-	InteractionRole playsRole interactionRole { multiplicity 0..*; }
-}
-
-relation InteractionHasPartyInteractionRole {
-	PartyInteractionRole playsRole partyInteractionRole { multiplicity 0..*; }
-	Interaction playsRole interaction { multiplicity 1..1; }
-}
-
-relation InformationVersionIsAuthored { 
-	Party playsRole author { multiplicity 1..1; }
-	InformationVersion playsRole authoredInformationVersion { multiplicity 0..*; }
-}
-
-relation InformationHasInformationVersions {
-	Information playsRole information { multiplicity 1..1; }
-	InformationVersion playsRole version { multiplicity 1..*; }
-}
-
-relation InformationHasLastInformationVersion {
-	Information playsRole { multiplicity 0..1; }
-	InformationVersion playsRole lastVersion { multiplicity 1..1; }
-}
-
-relation InformationVersionMayBeForked {
-	InformationVersion playsRole sourceVersion { multiplicity 0..1; }
-	InformationVersion playsRole forkedVersion { multiplicity 0..*; }
-}
-
-relation InformationVersionMayHaveNextVersion {
-	InformationVersion playsRole previousVersion { multiplicity 0..1; }
-	InformationVersion playsRole nextVersion { multiplicity 0..1; }
-}
-
-relation InteractionCanBeSourceOfInteractionRelation {
-	InteractionRelation playsRole targetInteractionRelation { multiplicity 0..*; }
-	Interaction playsRole targetInteraction { multiplicity 1..1; }
-}
-
-relation InteractionCanBeTargetOfInteractionRelation {
-	InteractionRelation playsRole sourceInteractionRelation { multiplicity 0..*; }
-	Interaction playsRole sourceInteraction { multiplicity 1..1; }
-}
-
-relation InformationRelationHasEffectivePeriods {
-	InformationRelation playsRole { multiplicity 0..1; }
-	EffectivePeriod playsRole effectivePeriod { multiplicity 1..*; }
-}
-
-relation InformationMayBeSourceOfInformationRelation {
-	Information playsRole sourceInformation { multiplicity 1..1; }
-	InformationRelation playsRole sourceInformationRelation { multiplicity 0..*; }
-}
-
-relation InformationMayBeTargetOfInformationRelation { 
-	Information playsRole targetInformation { multiplicity 1..1; }
-	InformationRelation playsRole targetInformationRelation { multiplicity 0..*; }
-}
-
-relation InformationVersionHasEffectivePeriods {
-	InformationVersion playsRole { multiplicity 0..1; }
-	EffectivePeriod playsRole effectivePeriod { multiplicity 1..1; }
-}
-
-relation InformationRelationHasInformationRelationType {
-	InformationRelationType playsRole type { multiplicity 1..1; }
-	InformationRelation playsRole informationRelation { multiplicity 0..*; }
-}
-
