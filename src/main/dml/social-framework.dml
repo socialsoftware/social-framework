@@ -10,11 +10,33 @@ class Interaction {
 
 class Information;
 
+class InformationRole;
+
 class Attribute;
+
+class Discussion {
+	String theme;
+	DateTime creationTime;
+}
+
+class Conversation { 
+	DateTime creationTime;
+	String message;
+}
 
 relation SocialPlatformHasParty {
 	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
 	Party playsRole party { multiplicity 0..*; }
+}
+
+relation SocialPlatformHasInteraction {
+	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
+	Interaction playsRole interaction { multiplicity 0..*; }
+}
+
+relation InformationHasClonedInformation { 
+	Information playsRole originalInformation { multiplicity 0..1; }
+	Information playsRole forkedInformation { multiplicity 0..*; }
 }
 
 relation PartyHasInteraction { 
@@ -32,7 +54,32 @@ relation InteractionHasInformation {
 	Information playsRole information { multiplicity 0..*; }
 }
 
+relation InformationHasInformationRole { 
+	Information playsRole information { multiplicity 0..1; }
+	InformationRole playsRole role {multiplicity 0..1;}
+}
+
 relation InformationHasAttributes { 
 	Information playsRole information { multiplicity 0..1; }
 	Attribute playsRole attribute { multiplicity 0..*; }
+}
+
+relation InteractionHasDiscussion { 
+	Interaction  playsRole interaction { multiplicity 0..1; }
+	Discussion playsRole discussion { multiplicity 0..*; }
+}
+
+relation DiscussionHasConversation {
+	Discussion playsRole discussion { multiplicity 0..1; }
+	Conversation playsRole conversation { multiplicity 0..*; }
+}
+
+relation DiscussionHasCreatorUser {
+	Discussion playsRole discussion { multiplicity 0..1; }
+	Party playsRole creator { multiplicity 0..1; }
+}
+
+relation ConversationHasSenderUser {
+	Conversation playsRole conversation { multiplicity 0..1; }
+	Party playsRole sender { multiplicity 0..1; }
 }
