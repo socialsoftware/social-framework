@@ -1,4 +1,4 @@
-package pt.ist.socialframework.domain;
+	package pt.ist.socialframework.domain;
 
 class SocialPlatform;
 
@@ -10,9 +10,21 @@ class Interaction {
 
 class Information;
 
-class InformationRole;
+class InformationRoleManager;
 
-class Attribute;
+class InformationRole {
+	String role;
+}
+
+class Attribute {
+	String value;
+}
+
+class AttributeRoleManager;
+
+class AttributeRole {
+	String role;
+}
 
 class Discussion {
 	String theme;
@@ -32,6 +44,16 @@ relation SocialPlatformHasParty {
 relation SocialPlatformHasInteraction {
 	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
 	Interaction playsRole interaction { multiplicity 0..*; }
+}
+
+relation SocialPlaformHasInformationRoleManager {
+	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
+	InformationRoleManager playsRole informationRoleManager { multiplicity 0..1; }
+}
+
+relation SocialPlatformHasAttributeRoleManager { 
+	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
+	AttributeRoleManager playsRole attributeRoleManager { multiplicity 0..1; }
 }
 
 relation InformationHasClonedInformation { 
@@ -55,13 +77,28 @@ relation InteractionHasInformation {
 }
 
 relation InformationHasInformationRole { 
-	Information playsRole information { multiplicity 0..1; }
+	Information playsRole information { multiplicity 0..*; }
 	InformationRole playsRole role {multiplicity 0..1;}
+}
+
+relation InformationRoleManagerHasInformationRole { 
+	InformationRoleManager playsRole informationRoleManager { multiplicity 0..1; }
+	InformationRole playsRole informationRole { multiplicity 0..*; }
 }
 
 relation InformationHasAttributes { 
 	Information playsRole information { multiplicity 0..1; }
 	Attribute playsRole attribute { multiplicity 0..*; }
+}
+
+relation AttributeHasAttributeRole { 
+	Attribute playsRole attribute { multiplicity 0..*; }
+	AttributeRole playsRole attributeRole { multiplicity 0..1; }
+}
+
+relation AttributeRoleManagerHasAttributeRole {
+	AttributeRoleManager playsRole attributeRoleManager { multiplicity 0..1; }
+	AttributeRole playsRole attributeRole { multiplicity 0..*; }
 }
 
 relation InteractionHasDiscussion { 
@@ -74,12 +111,12 @@ relation DiscussionHasConversation {
 	Conversation playsRole conversation { multiplicity 0..*; }
 }
 
-relation DiscussionHasCreatorUser {
+relation DiscussionHasCreatorParty {
 	Discussion playsRole discussion { multiplicity 0..1; }
 	Party playsRole creator { multiplicity 0..1; }
 }
 
-relation ConversationHasSenderUser {
+relation ConversationHasSenderParty {
 	Conversation playsRole conversation { multiplicity 0..1; }
 	Party playsRole sender { multiplicity 0..1; }
 }

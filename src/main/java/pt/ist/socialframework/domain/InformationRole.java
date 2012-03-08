@@ -5,5 +5,4 @@ public class InformationRole extends InformationRole_Base {
     public  InformationRole() {
         super();
     }
-    
 }
