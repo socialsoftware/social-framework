@@ -1,4 +1,6 @@
-	package pt.ist.socialframework.domain;
+package pt.ist.socialframework.domain;
+
+enum pt.ist.socialframework.domain.SynchronizationMode.SynchronizationState as SysnchronizationState;
 
 class SocialPlatform;
 
@@ -15,6 +17,18 @@ class InformationRoleManager;
 class InformationRole {
 	String role;
 }
+
+class InformationRelation;
+
+class SynchronizationMode {
+	SysnchronizationState mode;
+}
+
+class ReadOnly extends SynchronizationMode;
+
+class AutomaticWrite extends SynchronizationMode;
+
+class ManualWrite extends SynchronizationMode;
 
 class Attribute {
 	String value;
@@ -56,9 +70,24 @@ relation SocialPlatformHasAttributeRoleManager {
 	AttributeRoleManager playsRole attributeRoleManager { multiplicity 0..1; }
 }
 
-relation InformationHasClonedInformation { 
+relation InformationToCloneHasSynchronizationMode { 
 	Information playsRole originalInformation { multiplicity 0..1; }
-	Information playsRole forkedInformation { multiplicity 0..*; }
+	SynchronizationMode playsRole originalSynchronizationMode { multiplicity 0..*; }
+}
+
+relation SynchronizationModeHasClonedInformation {
+	SynchronizationMode playsRole clonedSynchronizationMode { multiplicity 0..1; }
+	Information playsRole informationCloned { multiplicity 0..*; }
+}
+
+relation InformationHasInformationRelation {
+	Information playsRole informationSource { multiplicity 0..1; }
+	InformationRelation playsRole informationRelationSource { multiplicity 0..1; }
+}
+
+relation InformationRelationHasInformation { 
+	InformationRelation playsRole informationRelationDestination { multiplicity 0..*; }
+	Information playsRole informationDestination { multiplicity 0..*; }
 }
 
 relation PartyHasInteraction { 

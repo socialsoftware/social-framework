@@ -1,6 +1,7 @@
 package pt.ist.socialframework.domain;
 
-public class Information extends Information_Base {
+
+public class Information extends Information_Base{
 	
 	public void createAttribute(AttributeRole attributeRole, String type, String value) {
 		Attribute attribute = new Attribute(attributeRole);
@@ -16,27 +17,36 @@ public class Information extends Information_Base {
 		stringAttribute.setAttributeRole(createAttributeRole);
 		createAttributeRole.addAttribute(stringAttribute);
 	}
-  
 	
-//	public void init(InformationVersion informationVersion) {
-//		addVersion(informationVersion);
-//		setLastVersion(informationVersion);
-//	}
-//	
-//	public void addNewInformationVersion(InformationVersion informationVersion) {
-//		if(hasLastVersion()) {
-//			addVersion(informationVersion);
-//			getLastVersion().setNextVersion(informationVersion);
-//			setLastVersion(informationVersion);			
-//		} else {
-//			init(informationVersion);
+	public void createInformationRelation(Information informationDestination) {
+		InformationRelation informationRelation = new InformationRelation();
+		this.setInformationRelationSource(informationRelation);
+		informationRelation.setInformationSource(this);
+		informationDestination.addInformationRelationDestination(informationRelation);
+		informationRelation.addInformationDestination(informationDestination);
+	}
+	
+	
+	
+	public Information createClone(SynchronizationMode mode, Information clonedInformation) {
+		
+		this.addOriginalSynchronizationMode(mode);
+		mode.setOriginalInformation(this);
+		
+		mode.addInformationCloned(clonedInformation);
+		clonedInformation.setClonedSynchronizationMode(mode);
+//		if(this.hasAnyAttribute()) {
+//			for(Attribute attr : this.getAttribute()) {
+//				Attribute clonedAttribute =  new Attribute();
+//				clonedAttribute.setAttributeRole(attr.getAttributeRole());
+//				attr.getAttributeRole().addAttribute(clonedAttribute);
+//				clonedAttribute.setInformation(clonedInformation);
+//				clonedInformation.addAttribute(clonedAttribute);
+//				clonedAttribute.setValue(attr.getValue());
+//			}
 //		}
-//	}
-//	
-//	public Set<Information> getRelatedInformation(InformationRelation informationRelation) {
-//		Set<Information> information = new HashSet<Information>();
-//		InformationVersion informationVersion = getLastVersion();
-//		return information;
-//	}
-	
+		clonedInformation.setRole(this.getRole());
+		this.getRole().addInformation(clonedInformation);
+		return clonedInformation;
+	}	
 }
