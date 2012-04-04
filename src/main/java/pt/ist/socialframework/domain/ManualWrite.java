@@ -6,4 +6,8 @@ public class ManualWrite extends ManualWrite_Base {
         super();
     }
     
+    public void sync(){
+    	System.out.println("Sync do Manual Write");
+    	
+    }
 }

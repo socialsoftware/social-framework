@@ -1,6 +1,7 @@
 package pt.ist.socialframework.domain;
 
 enum pt.ist.socialframework.domain.SynchronizationMode.SynchronizationState as SysnchronizationState;
+enum pt.ist.socialframework.domain.InformationChangesState.InformationState as InformationState;
 
 class SocialPlatform;
 
@@ -10,7 +11,11 @@ class Interaction {
 	DateTime creationTime;
 }
 
-class Information;
+class Information ;
+
+class InformationChangesState {
+	InformationState state;
+}
 
 class InformationRoleManager;
 
@@ -35,9 +40,17 @@ class Attribute {
 }
 
 class AttributeRoleManager;
-
+	
 class AttributeRole {
 	String role;
+}
+
+class TextAttribute extends Attribute {
+	String textValue;
+}
+
+class NumericAttribute extends .pt.ist.socialframework.domain.Attribute {
+	float numericValue;
 }
 
 class Discussion {
@@ -68,6 +81,11 @@ relation SocialPlaformHasInformationRoleManager {
 relation SocialPlatformHasAttributeRoleManager { 
 	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
 	AttributeRoleManager playsRole attributeRoleManager { multiplicity 0..1; }
+}
+
+relation InformatioHasChangesState {
+	Information playsRole information { multiplicity 0..1; }
+	InformationChangesState playsRole changeState { multiplicity 0..1; }
 }
 
 relation InformationToCloneHasSynchronizationMode { 

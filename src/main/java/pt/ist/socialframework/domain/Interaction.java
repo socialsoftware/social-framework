@@ -2,7 +2,19 @@ package pt.ist.socialframework.domain;
 
 import java.util.ArrayList;
 
+import org.joda.time.DateTime;
+
 public class Interaction extends Interaction_Base {
+	
+	public void createDiscussion(Party party, String theme) {
+		Discussion discussion =  new Discussion();
+		discussion.setCreationTime(new DateTime());
+		discussion.setTheme(theme);
+		discussion.setCreator(party);
+
+		addDiscussion(discussion);
+		discussion.setInteraction(this);
+	}
 	
 	public void connectInteraction(Interaction interactionToConnect) {
 		if(interactionToConnect !=  null) {
@@ -27,6 +39,12 @@ public class Interaction extends Interaction_Base {
 			}
 		}
 		return this;
+	}
+	
+	public void syncInformationToSourceInteraction(ArrayList<Information> informationToSync){
+		for(Information info : informationToSync){
+			
+		}
 	}
 	
 	

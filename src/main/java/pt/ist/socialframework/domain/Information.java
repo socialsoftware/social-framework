@@ -3,19 +3,31 @@ package pt.ist.socialframework.domain;
 
 public class Information extends Information_Base{
 	
-	public void createAttribute(AttributeRole attributeRole, String type, String value) {
-		Attribute attribute = new Attribute(attributeRole);
-//		attribute.setType(attributeRequestDto.getType());
-		attribute.setValue(value);
-		attribute.setInformation(this);
-		this.addAttribute(attribute);
+	public void createAttribute(String role, String value) {
+		AttributeRole attributeRole = this.getInteraction().getSocialPlatform().getAttributeRoleManager().createAttributeRole(role);
+		
+		if(role.equals("Text")) {
+			TextAttribute textAttribute =  new TextAttribute(attributeRole);
+			textAttribute.setTextValue(value);
+			textAttribute.setInformation(this);
+			this.addAttribute(textAttribute);
+		}
+		else
+		{
+			Attribute attribute = new Attribute(attributeRole);
+			attribute.setValue(value);
+			attribute.setInformation(this);
+			this.addAttribute(attribute);
+		}
 	}
+	
+	public void createAttribute(String role, float value) {
+		AttributeRole attributeRole = this.getInteraction().getSocialPlatform().getAttributeRoleManager().createAttributeRole(role);
 
-	public void createAttribute(Attribute stringAttribute, AttributeRole createAttributeRole) {
-		this.addAttribute(stringAttribute);
-		stringAttribute.setInformation(this);
-		stringAttribute.setAttributeRole(createAttributeRole);
-		createAttributeRole.addAttribute(stringAttribute);
+		NumericAttribute numericAttribute = new NumericAttribute(attributeRole);
+		numericAttribute.setNumericValue(value);
+		numericAttribute.setInformation(this);
+		this.addAttribute(numericAttribute);
 	}
 	
 	public void createInformationRelation(Information informationDestination) {
@@ -26,8 +38,6 @@ public class Information extends Information_Base{
 		informationRelation.addInformationDestination(informationDestination);
 	}
 	
-	
-	
 	public Information createClone(SynchronizationMode mode, Information clonedInformation) {
 		
 		this.addOriginalSynchronizationMode(mode);
@@ -35,18 +45,20 @@ public class Information extends Information_Base{
 		
 		mode.addInformationCloned(clonedInformation);
 		clonedInformation.setClonedSynchronizationMode(mode);
-//		if(this.hasAnyAttribute()) {
-//			for(Attribute attr : this.getAttribute()) {
-//				Attribute clonedAttribute =  new Attribute();
-//				clonedAttribute.setAttributeRole(attr.getAttributeRole());
-//				attr.getAttributeRole().addAttribute(clonedAttribute);
-//				clonedAttribute.setInformation(clonedInformation);
-//				clonedInformation.addAttribute(clonedAttribute);
-//				clonedAttribute.setValue(attr.getValue());
-//			}
-//		}
+		if(this.hasAnyAttribute()) {
+			for(Attribute attr : this.getAttribute()) {
+				Attribute clonedAttribute =  new Attribute();
+				attr.createClone(clonedAttribute);
+				clonedAttribute.setInformation(clonedInformation);
+				clonedInformation.addAttribute(clonedAttribute);
+			}
+		}
 		clonedInformation.setRole(this.getRole());
 		this.getRole().addInformation(clonedInformation);
 		return clonedInformation;
 	}	
+	
+//	public void sync(Lis){
+//		
+//	}
 }
