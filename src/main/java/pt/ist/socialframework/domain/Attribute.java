@@ -19,4 +19,14 @@ public class Attribute extends Attribute_Base {
 			clonedAttribute.setValue(getValue());
 		}
 	}
+
+	
+	public void attributeChange() {
+		
+	}
+	
+	public void sync() {
+		// TODO Auto-generated method stub
+		
+	}
 }

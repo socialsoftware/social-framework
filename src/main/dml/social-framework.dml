@@ -1,7 +1,12 @@
 package pt.ist.socialframework.domain;
 
-enum pt.ist.socialframework.domain.SynchronizationMode.SynchronizationState as SysnchronizationState;
-enum pt.ist.socialframework.domain.InformationChangesState.InformationState as InformationState;
+enum pt.ist.socialframework.domain.InteractionState.StateOfInteraction as StateOfInteraction;
+
+enum pt.ist.socialframework.domain.SynchronizationMode.HowSynchronizationMade as HowSynchronizationMade;
+enum pt.ist.socialframework.domain.SynchronizationMode.WhenSynchronizationMade as WhenSynchronizationMade;
+enum pt.ist.socialframework.domain.SynchronizationMode.AcessSynchronization as AcessSynchronization;
+
+enum pt.ist.socialframework.domain.ChangesState.State as State;
 
 class SocialPlatform;
 
@@ -11,10 +16,14 @@ class Interaction {
 	DateTime creationTime;
 }
 
+class InteractionState {
+	StateOfInteraction stateOfInteraction;
+}
+
 class Information ;
 
-class InformationChangesState {
-	InformationState state;
+class ChangesState {
+	State state;
 }
 
 class InformationRoleManager;
@@ -26,14 +35,10 @@ class InformationRole {
 class InformationRelation;
 
 class SynchronizationMode {
-	SysnchronizationState mode;
+	HowSynchronizationMade howSynchronizationMade;
+	WhenSynchronizationMade whenSynchronizationMade;
+	AcessSynchronization acessSynchronization;
 }
-
-class ReadOnly extends SynchronizationMode;
-
-class AutomaticWrite extends SynchronizationMode;
-
-class ManualWrite extends SynchronizationMode;
 
 class Attribute {
 	String value;
@@ -73,6 +78,11 @@ relation SocialPlatformHasInteraction {
 	Interaction playsRole interaction { multiplicity 0..*; }
 }
 
+relation InteractionHasInteractionState {
+	Interaction playsRole interaction {multiplicity 0..1;}
+	InteractionState playsRole state { multiplicity 0..1; }
+}
+
 relation SocialPlaformHasInformationRoleManager {
 	SocialPlatform playsRole socialPlatform { multiplicity 0..1; }
 	InformationRoleManager playsRole informationRoleManager { multiplicity 0..1; }
@@ -83,9 +93,14 @@ relation SocialPlatformHasAttributeRoleManager {
 	AttributeRoleManager playsRole attributeRoleManager { multiplicity 0..1; }
 }
 
+relation InformationHasCreator {
+	Information playsRole information { multiplicity 0..*; }
+	Party playsRole creator { multiplicity 0..1; }
+}
+
 relation InformatioHasChangesState {
 	Information playsRole information { multiplicity 0..1; }
-	InformationChangesState playsRole changeState { multiplicity 0..1; }
+	ChangesState playsRole changeState { multiplicity 0..1; }
 }
 
 relation InformationToCloneHasSynchronizationMode { 
@@ -95,12 +110,12 @@ relation InformationToCloneHasSynchronizationMode {
 
 relation SynchronizationModeHasClonedInformation {
 	SynchronizationMode playsRole clonedSynchronizationMode { multiplicity 0..1; }
-	Information playsRole informationCloned { multiplicity 0..*; }
+	Information playsRole informationCloned { multiplicity 0..1; }
 }
 
 relation InformationHasInformationRelation {
 	Information playsRole informationSource { multiplicity 0..1; }
-	InformationRelation playsRole informationRelationSource { multiplicity 0..1; }
+	InformationRelation playsRole informationRelationSource { multiplicity 0..*; }
 }
 
 relation InformationRelationHasInformation { 
@@ -118,9 +133,14 @@ relation InteractionHasInteractions {
 	Interaction playsRole destinationInteraction { multiplicity 0..*; }
 }
 
-relation InteractionHasInformation { 
-	Interaction playsRole interaction { multiplicity 0..1; }
-	Information playsRole information { multiplicity 0..*; }
+relation InteractionHasAcceptedInformation { 
+	Interaction playsRole interactionWithAcceptedInformation { multiplicity 0..1; }
+	Information playsRole aceptedInformation { multiplicity 0..*; }
+}
+
+relation InteractionHasInformationWaitingForAcceptance { 
+	Interaction playsRole interactionWithInformationForAcceptance { multiplicity 0..1; }
+	Information playsRole informationWaitingForAcceptance { multiplicity 0..*; }
 }
 
 relation InformationHasInformationRole { 
@@ -138,6 +158,12 @@ relation InformationHasAttributes {
 	Attribute playsRole attribute { multiplicity 0..*; }
 }
 
+relation AttributeHasChangesState {
+	Attribute playsRole attribute { multiplicity 0..1;}
+	ChangesState playsRole changeState { multiplicity 0..1; }
+}
+	
+
 relation AttributeHasAttributeRole { 
 	Attribute playsRole attribute { multiplicity 0..*; }
 	AttributeRole playsRole attributeRole { multiplicity 0..1; }
@@ -146,6 +172,16 @@ relation AttributeHasAttributeRole {
 relation AttributeRoleManagerHasAttributeRole {
 	AttributeRoleManager playsRole attributeRoleManager { multiplicity 0..1; }
 	AttributeRole playsRole attributeRole { multiplicity 0..*; }
+}
+
+relation AttributeToCloneHasSynchronizationMode { 
+	Attribute playsRole originalAttribute { multiplicity 0..1; }
+	SynchronizationMode playsRole originalSynchronizationMode { multiplicity 0..*; }
+}
+
+relation SynchronizationModeHasClonedAttribute {
+	SynchronizationMode playsRole clonedSynchronizationMode { multiplicity 0..1; }
+	Attribute playsRole attributeCloned { multiplicity 0..1; }
 }
 
 relation InteractionHasDiscussion { 
